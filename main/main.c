@@ -3,7 +3,7 @@
 #include "ble.h"
 
 #define MAIN_TAG "MAIN"
-// test clion
+
 
 #include "wifi.h"
 #include "ota.h"
