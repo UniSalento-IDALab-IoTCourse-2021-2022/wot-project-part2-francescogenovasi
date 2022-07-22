@@ -232,7 +232,6 @@ esp_err_t ble_beacon_mesh_send(void){
         ibeacon_resp->distance = 0.0;
         ibeacon_resp->rssi = 0;*/
 
-
         err = esp_ble_mesh_client_model_send_msg(ibeacon_model_client.model, &ctx, opcode, 0, NULL, 0, false, ROLE_NODE);
         if (err != ESP_OK)
             ESP_LOGE("SEND_GET", "Sending error\n");
