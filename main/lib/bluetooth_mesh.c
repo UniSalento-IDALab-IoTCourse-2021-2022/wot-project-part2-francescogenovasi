@@ -2,6 +2,7 @@
 #include <scan.h>
 #include "bluetooth_mesh.h"
 #include "esp_ibeacon_api.h"
+#include "ibeacon_model_mesh.h"
 #include <math.h>
 #include <esp_ble_mesh_local_data_operation_api.h>
 
@@ -233,6 +234,13 @@ esp_err_t ble_beacon_mesh_send(void){
         ibeacon_resp->rssi = 0;*/
 
         err = esp_ble_mesh_client_model_send_msg(ibeacon_model_client.model, &ctx, opcode, 0, NULL, 0, false, ROLE_NODE);
+
+        // TODO debug
+        // model_ibeacon_data_t ibeacon_resp = *(model_ibeacon_data_t *) param->model_operation.model->user_data;
+        // model_ibeacon_data_t ibeacon_resp = *(model_ibeacon_data_t *) ibeacon_model_client.model->user_data;
+        // ESP_LOGI("uuid ", "%02x %02x %02x", ibeacon_resp.uuid[0], ibeacon_resp.uuid[1], ibeacon_resp.uuid[2]);
+        // ESP_LOGI(BLUETOOTH_MESH_TAG, "MESH MESSAGE SENT - MAJOR: %hu, MINOR: %d, RSSI: %d distance: %f - Counter #%d - \n",
+             // ibeacon_resp.major, ibeacon_resp.minor, ibeacon_resp.rssi, ibeacon_resp.distance, ibeacon_resp.counter);
         if (err != ESP_OK)
             ESP_LOGE("SEND_GET", "Sending error\n");
         else
