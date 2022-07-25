@@ -39,6 +39,6 @@ void app_main(void)
         ESP_LOGE(MAIN_TAG, "Bluetooth mesh init failed (err %d)", err);
     }
 
-    xTaskCreate(&ota_task, "ota_update_task", 8192, NULL, 5, NULL);
+    // xTaskCreate(&ota_task, "ota_update_task", 8192, NULL, 5, NULL);
 }
 
