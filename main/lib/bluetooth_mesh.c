@@ -116,6 +116,7 @@ void config_server_callback(esp_ble_mesh_cfg_server_cb_event_t event, esp_ble_me
 }
 
 void ble_mesh_get_dev_uuid() {
+    // TODO creazione uuid -> dd dd macaddress 00 .. 00
     memcpy(dev_uuid + 2, esp_bt_dev_get_address(), BD_ADDR_LEN);
     ESP_LOG_BUFFER_HEX("dev_uuid", dev_uuid, 16);
 }
@@ -126,8 +127,8 @@ void beaconing_task(void *pvParameter){
     while(1){
         ble_beacon_mesh_send();
         vTaskDelay(pdMS_TO_TICKS(500));
-      //  uxHighWaterMark = uxTaskGetStackHighWaterMark(NULL);
-       // ESP_LOGI("WATERMARK2","Watermark: %d",uxHighWaterMark);
+        // uxHighWaterMark = uxTaskGetStackHighWaterMark(NULL);
+        // ESP_LOGI("WATERMARK2","Watermark: %d",uxHighWaterMark);
     }
 }
 
@@ -220,24 +221,18 @@ esp_err_t ble_beacon_mesh_send(void){
 
     ctx.net_idx = prov_key.net_idx;
     ctx.app_idx = prov_key.app_idx;
-    ctx.addr = ESP_BLE_MESH_GROUP_PUB_ADDR;
+    ctx.addr = ESP_BLE_MESH_GROUP_PUB_ADDR; //stesso gruppo del server
     ctx.send_ttl = 7;
     ctx.send_rel = false;
 
-    /*model_ibeacon_data_t* ibeacon_resp = (model_ibeacon_data_t *) ibeacon_model_client.model->user_data;
-
-    memcpy(ibeacon_resp->uuid, dev_uuid, 16);
-    ibeacon_resp->minor = 90;
-    ibeacon_resp->major = 69;
-    ibeacon_resp->counter = 0;
-    ibeacon_resp->distance = 0.0;
-    ibeacon_resp->rssi = 0;*/
+    // TODO debug
+    model_ibeacon_data_t ibeacon_aaa = *(model_ibeacon_data_t *) ibeacon_model_client.model->user_data;
+    // dev_uuid (stampato nel main riga 34) diverso dall'uuid che c'è in ibeacon_model_client.model->user_data
+    ESP_LOG_BUFFER_HEX("dev_uuid aaa", ibeacon_aaa.uuid, 16);
+    ESP_LOG_BUFFER_HEX("dev_uuid bbb", dev_uuid, 16);
+    ESP_LOGI("aaa","%hu %hu", ibeacon_aaa.minor, ibeacon_aaa.major);
 
     err = esp_ble_mesh_client_model_send_msg(ibeacon_model_client.model, &ctx, opcode, 0, NULL, 0, false, ROLE_NODE);
-
-    // TODO debug
-    model_ibeacon_data_t ibeacon_resp = *(model_ibeacon_data_t *) ibeacon_model_client.model->user_data;
-    ESP_LOG_BUFFER_HEX("dev_uuid aaa", ibeacon_resp.uuid, 16);
 
     if (err != ESP_OK)
         ESP_LOGE("SEND_GET", "Sending error\n");
