@@ -225,7 +225,7 @@ esp_err_t ble_beacon_mesh_send(void){
     ctx.send_rel = false;
 
     // TODO debug
-    ESP_LOG_BUFFER_HEX("dev_uuid bbb", dev_uuid, 16);
+    // ESP_LOG_BUFFER_HEX("dev_uuid bbb", dev_uuid, 16);
 
     /* model_ibeacon_data_t* ibeacon_resp1 = (model_ibeacon_data_t *) ibeacon_model_client.model->user_data;
     memcpy(ibeacon_resp1->uuid, dev_uuid, 16);
@@ -235,25 +235,38 @@ esp_err_t ble_beacon_mesh_send(void){
     ibeacon_resp1->distance = 0.0;
     ibeacon_resp1->rssi = 0; */
 
-    model_ibeacon_data_t *ibeacon_resp1 = (model_ibeacon_data_t *) ibeacon_model_client.model;
-    ESP_LOGI("test1","MAJOR: %hu", ibeacon_resp1->major);
-    ibeacon_resp1->major = 666;
-    ibeacon_resp1->minor = 6666;
+
+    /* model_ibeacon_data_t ibeacon_resp1 = *(model_ibeacon_data_t *) ibeacon_model_client.model;
+    ESP_LOGI("test1","MAJOR: %hu", ibeacon_resp1.major);
+    ibeacon_resp1.major = 666;
+    ibeacon_resp1.minor = 6666;
+    memcpy(ibeacon_resp1.uuid, dev_uuid, sizeof (dev_uuid)); */
 
     // err = esp_ble_mesh_client_model_send_msg(ibeacon_resp1, &ctx, opcode, 0, NULL, 0, false, ROLE_NODE);
 
-    //(model_ibeacon_data_t *) ibeacon_model_client.model->user_data
-
     // err iniziale
     err = esp_ble_mesh_client_model_send_msg(ibeacon_model_client.model, &ctx, opcode, 0, NULL, 0, false, ROLE_NODE);
+
+    /* model_ibeacon_data_t *ibeacon_resp123 = (model_ibeacon_data_t *) ibeacon_model_client.model->user_data;
+    ibeacon_resp123->major = 777;
+    ibeacon_resp123->minor = 777;
+    ibeacon_resp123->rssi = 777;
+    ibeacon_resp123->distance = 777;
+    ibeacon_resp123->counter = 777; */
+
+    /* ESP_LOGI("ibeacon_resp123: ", "MAJOR: %hu, MINOR: %d, RSSI: %d distance: %f - Counter #%d - \n",
+             ibeacon_resp123->major, ibeacon_resp123->minor, ibeacon_resp123->rssi, ibeacon_resp123->distance, ibeacon_resp123->counter);*/
+
+    // err = esp_ble_mesh_client_model_send_msg(ibeacon_model_client.model, &ctx, opcode, sizeof(ibeacon_resp123), (uint8_t *) &ibeacon_resp123, 0, false, ROLE_NODE);
+
 
     // err1 = esp_ble_mesh_model_publish(ibeacon_model_client.model, opcode, 0, NULL, ROLE_NODE);
 
     if (err != ESP_OK) {
         ESP_LOGE("SEND_GET", "Sending error\n");
     }else {
-        model_ibeacon_data_t *ibeacon_resp2 = (model_ibeacon_data_t *) ibeacon_model_client.model->user_data;
-        ESP_LOGI("SEND","Beaconing message sent (MAJOR sent: %hu)", ibeacon_resp2->major);
+        ESP_LOGI("SEND","Beaconing message sent");
+
     }
 
     /* if (err1 != ESP_OK) {

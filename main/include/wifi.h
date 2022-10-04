@@ -1,5 +1,6 @@
 #ifndef MESH_NETWORK_SERVER_WIFI_H
 #define MESH_NETWORK_SERVER_WIFI_H
+get_idf
 
 #include <string.h>
 #include "freertos/FreeRTOS.h"
